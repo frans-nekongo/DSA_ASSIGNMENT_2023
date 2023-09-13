@@ -4,14 +4,27 @@ import ballerina/http;
 # bound to port `9090`.
 
 # storage of variables
+
+type office record {|
+        int officeNumber;
+
+|};
 type Lecturer record {|
+    readonly int staffNumber;
+    string staffName;
     string title;
-    string artist;
-    int   staffNumber;
+    
+|};
+
+type course record {|
+string courseName;
+    string coursseCode;
+    string nQFlevel;
+    
 |};
 
 table<Lecturer> key(staffNumber) lecturers = table [
-    {title: "Blue Train", artist: "John Coltrane"},
+    {title: "Bluee Train", artist: "John Coltrane"},
     {title: "Jeru", artist: "Gerry Mulligan"}
 ];
 
