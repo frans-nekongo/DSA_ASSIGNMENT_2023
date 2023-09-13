@@ -5,15 +5,19 @@ import ballerina/http;
 
 # storage of variables
 
-type office record {|
-        int officeNumber;
 
-|};
 type Lecturer record {|
     readonly int staffNumber;
+    *officeN;
     string staffName;
     string title;
+    *course;
     
+|};
+
+type officeN record {|
+        int officeNumber;
+
 |};
 
 type course record {|
@@ -24,7 +28,7 @@ string courseName;
 |};
 
 table<Lecturer> key(staffNumber) lecturers = table [
-    {title: "Bluee Train", artist: "John Coltrane"},
+    {title: "Bluee Train"},
     {title: "Jeru", artist: "Gerry Mulligan"}
 ];
 
