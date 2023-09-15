@@ -76,7 +76,7 @@
                 <mxCell id="lS_Ayq2ZleD432p7r1ys-18" value="get Alllecturers" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="350" y="120" width="100" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="lS_Ayq2ZleD432p7r1ys-19" value="updateLecturer (&lt;br&gt;staff#&lt;br&gt;office #&lt;br&gt;staff Nm&lt;br&gt;title&lt;br&gt;courses)&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="lS_Ayq2ZleD432p7r1ys-19" value="updateLecturer (&lt;br&gt;&lt;br&gt;office #&lt;br&gt;staff Nm&lt;br&gt;title&lt;br&gt;courses)&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="560" y="140" width="100" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="lS_Ayq2ZleD432p7r1ys-21" value="get info on staff using staff #&lt;br&gt;&lt;br&gt;getLecterer / staff#" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
