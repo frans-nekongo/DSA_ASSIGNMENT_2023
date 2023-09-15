@@ -55,7 +55,7 @@ service /lecturers on new http:Listener(9090) {
     } else {
         http:Response response = new;
             response.statusCode = 404;
-            response.setPayload("No lecturer found with staff number " + staffNumber);
+            response.setPayload("No lecturer found with staff number " + staffNumber.toString());
             check caller->respond(response);
     }
 
