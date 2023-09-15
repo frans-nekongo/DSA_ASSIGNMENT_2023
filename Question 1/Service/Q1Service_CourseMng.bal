@@ -46,7 +46,7 @@ service / on new http:Listener(9090) {
     return lecturerTable.toArray();
    }
 
-   resource function get allLectures/() {
+   resource function get allLectures/[string staffNumber]() {
     
    }
    resource function put updateLec() {
