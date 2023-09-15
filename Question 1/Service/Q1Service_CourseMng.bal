@@ -34,11 +34,18 @@ table<Lecturer> key(staffNumber) lecturers = table [
 
 service / on new http:Listener(9090) {
 
+   resource function post addLecturer() {
+    
+   }
    resource function get allLectures()returns Lecturer[] {
     return lecturers.toArray();
    }
 
-   resource function post addLecturer() {
+   
+   resource function put updateLec() {
+    
+   }
+   resource function get () {
     
    }
 }
