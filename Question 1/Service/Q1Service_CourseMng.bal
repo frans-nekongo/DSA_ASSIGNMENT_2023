@@ -5,12 +5,6 @@ import ballerina/http;
 
 # storage of variables
 
-updateLecturer
-
-officeN
-staffName
-title
-course 
 
 type Lecturer record {|
     readonly int staffNumber;
