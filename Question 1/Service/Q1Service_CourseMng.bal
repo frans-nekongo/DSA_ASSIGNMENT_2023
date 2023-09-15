@@ -46,12 +46,12 @@ service /lecturers on new http:Listener(9090) {
     return lecturerTable.toArray();
    }
 
-   resource function get allLectures/staffNumber(int staffNumber)returns error? {
+   resource function get lecturersByStaffNumber(http:Caller caller,int staffNumber)returns error? {
     var lecturer = lecturerTable[staffNumber];
     if (lecturer is Lecturer){
         http:Response response = new;
         response.setJsonPayload(lecturer);
-        check caller->respond(response);
+        return  caller->respond(response);
     } else {
         http:Response response = new;
             response.statusCode = 404;
@@ -63,5 +63,8 @@ service /lecturers on new http:Listener(9090) {
    resource function put updateLec() {
     
    }
+   resource function delete delLec(http:Caller caller, string staffNumber) returns error? {}
+   resource function get getLecturersByCourse(http:Caller caller, string courseName) returns error? {}
+
 
 }
