@@ -27,25 +27,28 @@ string courseName;
     
 |};
 
-table<Lecturer> key(staffNumber) lecturers = table [
+table<Lecturer> key(staffNumber) lecturerTable = table [
     {officeNumber: 0, staffNumber: 1, staffName: "John", title: "Lecturer",courseName: "Data Structures and algorithms", coursseCode: "DSA611",nQFlevel: "7"}
     ];
 
 
 service / on new http:Listener(9090) {
 
-   resource function post addLecturer() {
-    
+   resource function post addLecturer(http:Caller caller, @http:Payload Lecturer lecture) returns error? {
+    lecturerTable.add(lecture);
+    http:Response response = new;
+    response.statusCode = 200;
+    response.setPayload("user added successfully");
+    check caller->respond(response);
    }
+   
    resource function get allLectures()returns Lecturer[] {
-    return lecturers.toArray();
+    return lecturerTable.toArray();
    }
 
    
    resource function put updateLec() {
     
    }
-   resource function get () {
-    
-   }
+
 }
