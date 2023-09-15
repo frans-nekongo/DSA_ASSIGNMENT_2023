@@ -32,7 +32,7 @@ table<Lecturer> key(staffNumber) lecturerTable = table [
     ];
 
 
-service / on new http:Listener(9090) {
+service /lecturers on new http:Listener(9090) {
 
    resource function post addLecturer(http:Caller caller, @http:Payload Lecturer lecture) returns error? {
     lecturerTable.add(lecture);
@@ -46,8 +46,19 @@ service / on new http:Listener(9090) {
     return lecturerTable.toArray();
    }
 
-   resource function get allLectures/[string staffNumber]() {
-    
+   resource function get allLectures/staffNumber(int staffNumber)returns error? {
+    var lecturer = lecturerTable[staffNumber];
+    if (lecturer is Lecturer){
+        http:Response response = new;
+        response.setJsonPayload(lecturer);
+        check caller->respond(response);
+    } else {
+        http:Response response = new;
+            response.statusCode = 404;
+            response.setPayload("No lecturer found with staff number " + staffNumber);
+            check caller->respond(response);
+    }
+
    }
    resource function put updateLec() {
     
