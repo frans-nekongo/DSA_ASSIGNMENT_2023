@@ -42,8 +42,11 @@ service /lecturers on new http:Listener(9090) {
     check caller->respond(response);
    }
 
-   resource function get allLectures()returns Lecturer[] {
-    return lecturerTable.toArray();
+   resource function get allLectures(http:Caller caller)returns error? {
+    var lecturers = lecturerTable.toArray();
+    http:Response response = new;
+    response.setJsonPayload(lecturers);
+    checkpanic caller->respond(response);
    }
 
    resource function get lecturersByStaffNumber(http:Caller caller,int staffNumber)returns error? {
