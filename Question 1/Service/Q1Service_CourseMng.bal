@@ -41,12 +41,14 @@ service / on new http:Listener(9090) {
     response.setPayload("user added successfully");
     check caller->respond(response);
    }
-   
+
    resource function get allLectures()returns Lecturer[] {
     return lecturerTable.toArray();
    }
 
-   
+   resource function get allLectures/() {
+    
+   }
    resource function put updateLec() {
     
    }
