@@ -63,33 +63,30 @@ service /lecturers on new http:Listener(9090) {
     }
 
    }
-   resource function put updateLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
-        var lecturerJson = req.getJsonPayload();
-        if (lecturerJson is json) {
-            Lecturer updatedLecturer = <Lecturer>lecturerJson;
-            var lecturerToUpdate = lecturerTable[staffNumber];
-            if (lecturerToUpdate is Lecturer) {
-                lecturerToUpdate.officeN = updatedLecturer.officeN;
-                lecturerToUpdate.staffName = updatedLecturer.staffName;
-                lecturerToUpdate.title = updatedLecturer.title;
-                lecturerToUpdate.course = updatedLecturer.course;
-                http:Response response = new;
-                response.setPayload("Lecturer updated successfully");
-                check caller->respond(response);
-            } else {
-                http:Response response = new;
-                response.statusCode = 404;
-                response.setPayload("No lecturer found with staff number " + staffNumber.toString());
-                check caller->respond(response);
-            }
-        } else {
-            http:Response response = new;
-            response.statusCode = 400;
-            response.setPayload("Invalid JSON payload received");
-            check caller->respond(response);
-        }
+    resource function put updateLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
+       
     }
-   resource function delete delLec(http:Caller caller, string staffNumber) returns error? {}
+resource function delete deleteLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
+    // Check if the lecturer exists in the table
+       if (lecturerTable.hasKey(staffNumber)) {
+        // Remove the lecturer from the table
+        _ = lecturerTable.remove(staffNumber);
+
+        // Send a success response
+        http:Response response = new;
+        response.statusCode = 200;
+        response.setPayload("Lecturer with staff number " + staffNumber.toString() + " deleted successfully");
+        check caller->respond(response);
+    } else {
+        // Send a not found response
+        http:Response response = new;
+        response.statusCode = 404;
+        response.setPayload("No lecturer found with staff number " + staffNumber.toString());
+        check caller->respond(response);
+    }
+}
+
+
    resource function get getLecturersByCourse(http:Caller caller, string courseName) returns error? {}
 
 
