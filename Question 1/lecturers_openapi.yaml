@@ -55,18 +55,11 @@ paths:
   /updateLecturer:
     put:
       operationId: putUpdatelecturer
-      parameters:
-      - name: staffNumber
-        in: query
-        required: true
-        schema:
-          type: integer
-          format: int64
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
-              description: Any type of entity body
+              $ref: '#/components/schemas/Lecturer'
       responses:
         "500":
           description: Internal server error
@@ -105,6 +98,23 @@ paths:
         required: true
         schema:
           type: string
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+  /getLecturersByOffice:
+    get:
+      operationId: getGetlecturersbyoffice
+      parameters:
+      - name: officeNumber
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         "500":
           description: Internal server error
