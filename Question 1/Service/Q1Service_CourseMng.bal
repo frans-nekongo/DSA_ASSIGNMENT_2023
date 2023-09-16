@@ -69,12 +69,12 @@ service /lecturers on new http:Listener(9090) {
             // Send a not found response
             http:Response response = new;
             response.statusCode = 404;
-            response.setPayload("No lecturer found with staff number ".toJsonString());
+            response.setPayload("No lecturer found with staff number " + updatedLecturer.staffNumber.toString());
             check caller->respond(response);
         } else {
             http:Response response = new;
             response.statusCode = 200;
-            response.setPayload("user updated  successfully");
+            response.setPayload("user updated successfully");
 
             //after header is sent checks if the client recieved the header
             check caller->respond(response);
