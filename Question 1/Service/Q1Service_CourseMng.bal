@@ -164,4 +164,4 @@ service /lecturers on new http:Listener(9090) {
 
 //http:Caller caller: This represents the remote HTTP client that initiated the HTTP request. This is used to send back the HTTP response to the client.
 //check caller->respond(response); sends the response to the client. If there is an error when sending the response, the check keyword will cause the function to return the error
-//g
+//The http:Request type represents an HTTP request received by the service.
