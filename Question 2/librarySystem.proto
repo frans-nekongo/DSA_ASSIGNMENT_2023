@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package library;
+
+
+//protobuf description for creation of book
+message Book {
+    string title = 1;
+    string author_1 = 2;
+    string location = 4;
+    string ISBN = 5;
+    bool available_status = 6;
+}
+
+
+//protobuf description for creating student user
+message Student {
+    string student_id = 1;
+    string first_name = 2;
+    string last_name= 3;
+    string role = 3; 
+}
+
+//protobuf description for creating librarian user
+message Librarian {
+    string librerian_id = 1;
+    string first_name = 2;
+    string last_name= 3;
+    string role = 3; 
+}
+
+//message descprition for user borrowing book
+message UserBookPair {
+    string user_id = 1;
+    string book_ISBN = 2;
+    Student Student= 3;
+}
+
+//protobuf description for creating library service
+service LibraryService {
+    // Add a book to the library and return the ISBN.
+    rpc AddBook(Book) returns (string);
+
+    // Create multiple users with specific profiles and return a confirmation message.
+    rpc CreateStudentUsers(stream Student) returns (string);
+
+    //Create multiple librarian users and returns confirmation messages
+    rpc CreateLibrerianUsers(stream Librarian) returns (string);
+
+    // Update the details of a book and return the updated book.
+    rpc UpdateBook(Book) returns (Book);
+
+    // Remove a book from the library collection and return a confirmation message.
+    rpc RemoveBook(string ISBN) returns (string);
+
+    // List all available books in the library.
+    rpc ListAvailableBooks(Empty) returns (stream Book);
+
+    // Search for a book by ISBN and return its location 
+    rpc LocateBook(string ISBN) returns (string);
+
+    // Borrow a book and return a confirmation message.
+    rpc BorrowBook(UserBookPair) returns (string);
+}
+
