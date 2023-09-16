@@ -66,6 +66,7 @@ service /lecturers on new http:Listener(9090) {
     //do this later
     resource function put updateLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
 
+
     }
     resource function delete deleteLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
         // Check if the lecturer exists in the table
@@ -102,3 +103,7 @@ service /lecturers on new http:Listener(9090) {
     }
 
 }
+
+//http:Caller caller: This represents the remote HTTP client that initiated the HTTP request. This is used to send back the HTTP response to the client.
+//check caller->respond(response); sends the response to the client. If there is an error when sending the response, the check keyword will cause the function to return the error
+//
