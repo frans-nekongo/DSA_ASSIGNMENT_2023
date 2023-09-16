@@ -39,6 +39,8 @@ service /lecturers on new http:Listener(9090) {
     http:Response response = new;
     response.statusCode = 200;
     response.setPayload("user added successfully");
+
+    //after header is sent checks if the client recieved the header
     check caller->respond(response);
    }
 
