@@ -63,6 +63,7 @@ service /lecturers on new http:Listener(9090) {
         }
 
     }
+    //do this later
     resource function put updateLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
 
     }
