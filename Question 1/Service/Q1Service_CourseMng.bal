@@ -83,23 +83,35 @@ service /lecturers on new http:Listener(9090) {
         }
 
     }
-    resource function put updateLecturer(http:Caller caller, http:Request req, @http:Payload Lecturer updatedLecturer) returns error? {
-        error? result = lecturerTable.put(updatedLecturer);
-        if (result is error) {
-            // Send a not found response
-            http:Response response = new;
-            response.statusCode = 404;
-            response.setPayload("Incorrect update lecturer command.");
-            check caller->respond(response);
-        } else {
-            http:Response response = new;
-            response.statusCode = 200;
-            response.setPayload("user updated successfully");
-
-            //after header is sent checks if the client recieved the header
-            check caller->respond(response);
-        }
+   resource function put updateLecturer(http:Caller caller, http:Request req, @http:Payload Lecturer updatedLecturer) returns error? {
+    // Check if the lecturer exists in the table
+    if (!lecturerTable.hasKey(updatedLecturer.staffNumber)) {
+        // Send a not found response
+        http:Response response = new;
+        response.statusCode = 404;
+        response.setPayload("No lecturer found with staff number " + updatedLecturer.staffNumber.toString());
+        check caller->respond(response);
+        return error("Lecturer not found");
     }
+
+    // Update the lecturer in the table
+    error? result = lecturerTable.put(updatedLecturer);
+    if (result is error) {
+        // Send a bad request response
+        http:Response response = new;
+        response.statusCode = 400;
+        response.setPayload("Incorrect update lecturer command.");
+        check caller->respond(response);
+        return error("Bad request");
+    } else {
+        http:Response response = new;
+        response.statusCode = 200;
+        response.setPayload("Lecturer updated successfully");
+        check caller->respond(response);
+        return ();
+    }
+}
+
     resource function delete deleteLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
         // Check if the lecturer exists in the table
         if (lecturerTable.hasKey(staffNumber)) {
