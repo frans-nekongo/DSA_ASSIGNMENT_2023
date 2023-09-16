@@ -63,9 +63,15 @@ service /lecturers on new http:Listener(9090) {
         }
 
     }
-    resource function put updateLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
+    resource function put updateLecturer(http:Caller caller, http:Request req, @http:Payload Lecturer updatedLecturer) returns error? {
+        lecturerTable.put(updatedLecturer);
+        http:Response response = new;
+        response.statusCode = 200;
+        response.setPayload("user added successfully");
 
-    }
+        //after header is sent checks if the client recieved the header
+        check caller->respond(response);
+    } 
     resource function delete deleteLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
         // Check if the lecturer exists in the table
         if (lecturerTable.hasKey(staffNumber)) {
