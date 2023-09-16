@@ -89,7 +89,20 @@ resource function delete deleteLecturer(http:Caller caller, http:Request req, in
 }
 
 
-   resource function get getLecturersByCourse(http:Caller caller, string courseName) returns error? {}
-
+   resource function get getLecturersByCourseCode(http:Caller caller, string courseCode) returns error? {
+    var filteredLecturers = lecturerTable.filter(function (Lecturer lecturer) {
+        return lecturer.course.courseCode == courseCode;
+    });
+    if (filteredLecturers.length() > 0) {
+        http:Response response = new;
+        response.setJsonPayload(filteredLecturers);
+        check caller->respond(response);
+    } else {
+        http:Response response = new;
+        response.statusCode = 404;
+        response.setPayload("No lecturers found for course code " + courseCode);
+        check caller->respond(response);
+    }
+}
 
 }
