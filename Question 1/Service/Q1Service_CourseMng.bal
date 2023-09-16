@@ -90,7 +90,7 @@ resource function delete deleteLecturer(http:Caller caller, http:Request req, in
 
 
    resource function get getLecturersByCourseCode(http:Caller caller, string courseCode) returns error? {
-    var filteredLecturers = lecturerTable.filter(function (Lecturer lecturer) {
+    var filteredLecturers = lecturerTable.filter(function (Lecturer lecturer) returns boolean{
         return lecturer.course.courseCode == courseCode;
     });
     if (filteredLecturers.length() > 0) {
