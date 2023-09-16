@@ -1,0 +1,42 @@
+{
+    "officeNumber": 210,
+    "courseName": "DSA",
+    "coursseCode": "DDSA611",
+    "nQFlevel": "NQF7",
+    "staffName": "Nashandi",
+    "staffNumber": 1234798,
+    "title": "lecturer"
+  }
+
+
+
+
+  [
+    {
+      "staffNumber": 1,
+      "staffName": "John",
+      "title": "Lecturer",
+      "officeNumber": 0,
+      "courseName": "Data Structures and algorithms",
+      "coursseCode": "DSA611",
+      "nQFlevel": "7"
+    },
+    {
+      "staffNumber": 1234799,
+      "staffName": "Ruusa",
+      "title": "lecturer",
+      "officeNumber": 211,
+      "courseName": "DTA",
+      "coursseCode": "DDSA611",
+      "nQFlevel": "NQF7"
+    },
+    {
+      "staffNumber": 1836846,
+      "staffName": "ruusa",
+      "title": "lecturer",
+      "officeNumber": 210,
+      "courseName": "DTA",
+      "coursseCode": "DTA611",
+      "nQFlevel": "NQF7"
+    }
+  ]
