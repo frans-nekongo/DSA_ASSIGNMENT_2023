@@ -32,23 +32,35 @@ table<Lecturer> key(staffNumber) lecturerTable = table [
 
 service /lecturers on new http:Listener(9090) {
 
-    resource function post addLecturer(http:Caller caller, @http:Payload Lecturer lecture) returns error? {
-        error? result = lecturerTable.add(lecture);
-        if (result is error) {
-            // Send a not found response
-            http:Response response = new;
-            response.statusCode = 404;
-            response.setPayload("Incorrect add lecturer request.");
-            check caller->respond(response);
-        } else {
-            http:Response response = new;
-            response.statusCode = 200;
-            response.setPayload("user added successfully");
-
-            //after header is sent checks if the client recieved the header
-            check caller->respond(response);
-        }
+   resource function post addLecturer(http:Caller caller, @http:Payload Lecturer lecture) returns error? {
+    // Check if the lecturer already exists in the table
+    if (lecturerTable.hasKey(lecture.staffNumber)) {
+        // Send a conflict response
+        http:Response response = new;
+        response.statusCode = 409;
+        response.setPayload("Lecturer with staff number " + lecture.staffNumber.toString() + " already exists");
+        check caller->respond(response);
+        return error("Duplicate entry");
     }
+
+    // Add the lecturer to the table
+    error? result = lecturerTable.add(lecture);
+    if (result is error) {
+        // Send a bad request response
+        http:Response response = new;
+        response.statusCode = 400;
+        response.setPayload("Incorrect add lecturer request.");
+        check caller->respond(response);
+        return error("Bad request");
+    } else {
+        http:Response response = new;
+        response.statusCode = 200;
+        response.setPayload("Lecturer added successfully");
+        check caller->respond(response);
+        return ();
+    }
+}
+
 
     resource function get allLectures(http:Caller caller) returns error? {
         var lecturers = lecturerTable.toArray();
