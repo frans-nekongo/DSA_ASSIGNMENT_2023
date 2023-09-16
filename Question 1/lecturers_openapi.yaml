@@ -96,11 +96,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorPayload'
-  /getLecturersByCourse:
+  /getLecturersByCourseCode:
     get:
-      operationId: getGetlecturersbycourse
+      operationId: getGetlecturersbycoursecode
       parameters:
-      - name: courseName
+      - name: courseCode
         in: query
         required: true
         schema:
