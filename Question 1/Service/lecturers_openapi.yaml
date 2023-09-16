@@ -1,0 +1,176 @@
+openapi: 3.0.1
+info:
+  title: Lecturers
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/lecturers"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "9090"
+paths:
+  /addLecturer:
+    post:
+      operationId: postAddlecturer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lecturer'
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+  /allLectures:
+    get:
+      operationId: getAlllectures
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+  /lecturersByStaffNumber:
+    get:
+      operationId: getLecturersbystaffnumber
+      parameters:
+      - name: staffNumber
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+  /updateLecturer:
+    put:
+      operationId: putUpdatelecturer
+      parameters:
+      - name: staffNumber
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              description: Any type of entity body
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+  /deleteLecturer:
+    delete:
+      operationId: deleteDeletelecturer
+      parameters:
+      - name: staffNumber
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              description: Any type of entity body
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+  /getLecturersByCourse:
+    get:
+      operationId: getGetlecturersbycourse
+      parameters:
+      - name: courseName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+components:
+  schemas:
+    officeN:
+      required:
+      - officeNumber
+      type: object
+      properties:
+        officeNumber:
+          type: integer
+          format: int64
+    ErrorPayload:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason phrase
+        path:
+          type: string
+          description: Request path
+        method:
+          type: string
+          description: Method type of the request
+        message:
+          type: string
+          description: Error message
+        timestamp:
+          type: string
+          description: Timestamp of the error
+        status:
+          type: integer
+          description: Relevant HTTP status code
+          format: int32
+    course:
+      required:
+      - courseName
+      - coursseCode
+      - nQFlevel
+      type: object
+      properties:
+        courseName:
+          type: string
+        coursseCode:
+          type: string
+        nQFlevel:
+          type: string
+    Lecturer:
+      allOf:
+      - $ref: '#/components/schemas/officeN'
+      - $ref: '#/components/schemas/course'
+      - required:
+        - staffName
+        - staffNumber
+        - title
+        type: object
+        properties:
+          staffNumber:
+            type: integer
+            format: int64
+          staffName:
+            type: string
+          title:
+            type: string
