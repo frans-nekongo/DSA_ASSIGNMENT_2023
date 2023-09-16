@@ -87,13 +87,7 @@ service /lecturers on new http:Listener(9090) {
     }
 
     resource function get getLecturersByCourseCode(http:Caller caller, string courseCode) returns error? {
-<<<<<<< Updated upstream
-        var filteredLecturers = lecturerTable.filter(function(Lecturer lecturer) returns boolean {
-            return lecturer.course.courseCode == courseCode;
-        });
-=======
         var filteredLecturers = lecturerTable.filter(lecturer => lecturer.coursseCode === courseCode);
->>>>>>> Stashed changes
         if (filteredLecturers.length() > 0) {
             http:Response response = new;
             response.setJsonPayload(filteredLecturers.toJsonString());
