@@ -64,7 +64,7 @@ service /lecturers on new http:Listener(9090) {
 
     }
     resource function put updateLecturer(http:Caller caller, http:Request req, @http:Payload Lecturer updatedLecturer) returns error? {
-        var result = lecturerTable.put(updatedLecturer);
+        error? result = lecturerTable.put(updatedLecturer);
         if (result is error) {
             // Send a not found response
             http:Response response = new;
