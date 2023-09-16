@@ -17,9 +17,11 @@ public function main() returns error {
     match option {
         "1" => {addLecturer();}
         "2" => {getAllLectures();}
-        "3" => {getLectureById();}
+        "3" => {getLecturerByStaffNumber();}
         "4" => {updateLecture();}
         "5" => {deleteLecture();}
+        "6" => {getLecturersByCourseCode()}
+        "7" => {getLecturersByOfficeNumber()}
         _ => {io:println("Invalid option");}
     }
 }
@@ -55,14 +57,44 @@ function fromString(string s) returns int|error{}
     io:println("Response: ", response);
 //}
 
-function getLectureById() {
-    // Code for getting a user by ID
-}
+//function getLecturerByStaffNumber() returns error? {
+    string staffNumber = check io:readln("Enter staff number: ");
+    var response = lecturerClient->get("/lecturers/lecturersByStaffNumber?staffNumber=" + staffNumber);
+    io:println("Response: ", response);
+//}
 
-function updateLecture() {
-    // Code for updating a user
-}
+//function updateLecturer() returns error? {
+    string staffNumber2 = check io:readln("Enter staff number: ");
+    int|error staffNumber = int:fromString(staffNumber2);
+    string staffName = check io:readln("Enter staff name: ");
+    string title = check io:readln("Enter title: ");
+    string courseName = check io:readln("Enter course name: ");
+    string courseCode = check io:readln("Enter course code: ");
+    string nQFlevel = check io:readln("Enter NQF level: ");
 
-function deleteLecture() {
-    // Code for deleting a user
-}
+    Lecturer lecturer = {
+        staffNumber: check staffNumber,
+        officeN: { officeNumber: officeNumber },
+        staffName: staffName,
+        title: title,
+        course: { courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel }
+    ,courseName: "", coursseCode: "", officeNumber: 0, nQFlevel: ""};
+
+    var response = lecturerClient->put("/lecturers/updateLecturer", lecturer);
+    io:println("Response: ", response);
+//}
+
+//function deleteLecturer() returns error? {
+    string staffNumber = check io:readln("Enter staff number: ");
+    var response = lecturerClient->delete("/lecturers/deleteLecturer?staffNumber=" + staffNumber);
+    io:println("Response: ", response);
+//}
+//function getLecturersByCourseCode() returns error? {
+    string courseCode = check io:readln("Enter course code: ");
+    var response = lecturerClient->get("/lecturers/getLecturersByCourseCode?courseCode=" + courseCode);
+//    io:println("Response: ", response);
+//function getLecturersByOfficeNumber() returns error? {
+    string officeNumber = check io:readln("Enter office number: ");
+    var response = lecturerClient->get("/lecturers/getLecturersByOffice?officeNumber=" + officeNumber);
+    io:println("Response: ", response);
+//}
