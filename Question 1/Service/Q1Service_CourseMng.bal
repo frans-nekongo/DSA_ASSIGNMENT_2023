@@ -33,13 +33,21 @@ table<Lecturer> key(staffNumber) lecturerTable = table [
 service /lecturers on new http:Listener(9090) {
 
     resource function post addLecturer(http:Caller caller, @http:Payload Lecturer lecture) returns error? {
-        lecturerTable.add(lecture);
-        http:Response response = new;
-        response.statusCode = 200;
-        response.setPayload("user added successfully");
+        error? result = lecturerTable.add(lecture);
+        if (result is error) {
+            // Send a not found response
+            http:Response response = new;
+            response.statusCode = 404;
+            response.setPayload("Incorrect add lecturer request.");
+            check caller->respond(response);
+        } else {
+            http:Response response = new;
+            response.statusCode = 200;
+            response.setPayload("user added successfully");
 
-        //after header is sent checks if the client recieved the header
-        check caller->respond(response);
+            //after header is sent checks if the client recieved the header
+            check caller->respond(response);
+        }
     }
 
     resource function get allLectures(http:Caller caller) returns error? {
@@ -69,7 +77,7 @@ service /lecturers on new http:Listener(9090) {
             // Send a not found response
             http:Response response = new;
             response.statusCode = 404;
-            response.setPayload("No lecturer found with staff number " + updatedLecturer.staffNumber.toString());
+            response.setPayload("Incorrect update lecturer command.");
             check caller->respond(response);
         } else {
             http:Response response = new;
