@@ -114,6 +114,20 @@ service /lecturers on new http:Listener(9090) {
         }
     }
 
+    resource function get getLecturersByOffice(http:Caller caller, int officeNumber) returns error? {
+        var filteredLecturers = lecturerTable.filter(lecturer => lecturer.officeNumber === officeNumber);
+        if (filteredLecturers.length() > 0) {
+            http:Response response = new;
+            response.setJsonPayload(filteredLecturers.toJsonString());
+            check caller->respond(response);
+        } else {
+            http:Response response = new;
+            response.statusCode = 404;
+            response.setPayload("No lecturers found for office number " + officeNumber.toString());
+            check caller->respond(response);
+        }
+    }
+
 }
 
 //http:Caller caller: This represents the remote HTTP client that initiated the HTTP request. This is used to send back the HTTP response to the client.
