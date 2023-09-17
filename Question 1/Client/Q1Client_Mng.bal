@@ -6,71 +6,85 @@ import ballerina/io;
 public function main() returns error? {
     http:Client lecturerClient = check new ("http://localhost:9090");
 
-    io:println("Welcome to the API client!");
-    io:println("Please select an option:");
-    io:println("1. Add user");
-    io:println("2. Get all users");
-    io:println("3. Get user by ID");
-    io:println("4. Update user");
-    io:println("5. Delete user");
+    string option = "";
 
-    string option = io:readln("Enter your option: ");
+    while option !== "8" {
+        io:println("");
+        io:println("Welcome to the API client!");
+        io:println("Please select an option:");
+        io:println("1. Add user");
+        io:println("2. Get all users");
+        io:println("3. Get user by ID");
+        io:println("4. Update user");
+        io:println("5. Delete user");
+        io:println("6. Get user by course code");
+        io:println("7. Get user by office number");
+        io:println("8. Exit program");
 
-    match option {
-        "1" => {
-            error? lecturerResult = addLecturer(lecturerClient);
-            if lecturerResult is error {
-                io:println("Error adding lecturer");
+        option = io:readln("Enter your option: ");
+
+        match option {
+            "1" => {
+                error? lecturerResult = addLecturer(lecturerClient);
+                if lecturerResult is error {
+                    io:println("Error adding lecturer");
+                }
             }
-        }
 
-        "2" => {
-            error? allLectures = getAllLectures(lecturerClient);
-            if allLectures is error {
-                io:println("cannot retrieve lecturers");
+            "2" => {
+                error? allLectures = getAllLectures(lecturerClient);
+                if allLectures is error {
+                    io:println("cannot retrieve lecturers");
+                }
             }
-        }
 
-        "3" => {
-            error? lecturerByStaffNumber = getLecturerByStaffNumber(lecturerClient);
-            if lecturerByStaffNumber is error {
-                io:println("cannot retrieve lecturer");
+            "3" => {
+                error? lecturerByStaffNumber = getLecturerByStaffNumber(lecturerClient);
+                if lecturerByStaffNumber is error {
+                    io:println("cannot retrieve lecturer");
+                }
             }
-        }
 
-        "4" => {
-            error? lecturer = updateLecturer(lecturerClient);
-            if lecturer is error {
-                io:println("cannot update lecturer");
+            "4" => {
+                error? lecturer = updateLecturer(lecturerClient);
+                if lecturer is error {
+                    io:println("cannot update lecturer");
+                }
             }
-        }
 
-        "5" => {
-            error? lecturer = deleteLecturer(lecturerClient);
-            if lecturer is error {
-                io:println("unable to delete lecturer");
+            "5" => {
+                error? lecturer = deleteLecturer(lecturerClient);
+                if lecturer is error {
+                    io:println("unable to delete lecturer");
+                }
             }
-        }
 
-        "6" => {
-            error? lecturersByCourseCode = getLecturersByCourseCode(lecturerClient);
-            if lecturersByCourseCode is error {
-                io:println("cannot retrieve lecturer");
+            "6" => {
+                error? lecturersByCourseCode = getLecturersByCourseCode(lecturerClient);
+                if lecturersByCourseCode is error {
+                    io:println("cannot retrieve lecturer");
+                }
             }
-        }
 
-        "7" => {
-            error? lecturersByOfficeNumber = getLecturersByOfficeNumber(lecturerClient);
-            if lecturersByOfficeNumber is error {
-
+            "7" => {
+                error? lecturersByOfficeNumber = getLecturersByOfficeNumber(lecturerClient);
+                if lecturersByOfficeNumber is error {
+                    io:println("cannot retrieve lecturer");
+                }
             }
-        }
-        _ => {
-            io:println("Invalid option");
+
+            "8" => {
+                // Exit the program if they enter "exit"
+                io:println("Exiting the program...");
+            }
+
+            _ => {
+                io:println("Invalid option");
+            }
+
         }
     }
 }
-
 function addLecturer(http:Client lecturerClient) returns error? {
 
     // Prompt the user for the necessary information
@@ -88,14 +102,12 @@ function addLecturer(http:Client lecturerClient) returns error? {
     // Construct the lecturer record
     Lecturer lecturer = {
         staffNumber: check staffNumber,
-        officeNumber: check  officeNumber,
+        officeNumber: check officeNumber,
         staffName: staffName,
         title: title,
-        course: {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
-    ,
+        // course: {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel},
         courseName: "",
         coursseCode: "",
-        officeNumber: 0,
         nQFlevel: ""
     };
 
@@ -117,7 +129,7 @@ function getLecturerByStaffNumber(http:Client lecturerClient) returns error? {
     io:println("Response: ", response);
 }
 
-//function updateLecturer(http:Client lecturerClient) returns error? {
+function updateLecturer(http:Client lecturerClient) returns error? {
     string staffNumber2 = check io:readln("Enter staff number: ");
     int|error staffNumber = int:fromString(staffNumber2);
     string officeNumber1 = check io:readln("Enter office number: ");
@@ -130,20 +142,18 @@ function getLecturerByStaffNumber(http:Client lecturerClient) returns error? {
 
     Lecturer lecturer = {
         staffNumber: check staffNumber,
-        officeN: check officeNumber,
+        officeNumber: check officeNumber,
         staffName: staffName,
         title: title,
-        course: {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
-    ,
+        // course: {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel},
         courseName: "",
         coursseCode: "",
-        officeNumber: 0,
         nQFlevel: ""
     };
 
     http:Response|http:Error response = lecturerClient->put("/lecturers/updateLecturer", lecturer);
     io:println("Response: ", response);
-//}
+}
 
 function deleteLecturer(http:Client lecturerClient) returns error? {
     string staffNumber = check io:readln("Enter staff number: ");
