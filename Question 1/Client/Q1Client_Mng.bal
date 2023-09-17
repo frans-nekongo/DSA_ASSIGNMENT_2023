@@ -88,14 +88,13 @@ function addLecturer(http:Client lecturerClient) returns error? {
     // Construct the lecturer record
     Lecturer lecturer = {
         staffNumber: check staffNumber,
-        officeNumber: check  officeNumber,
+        "officeNumber": check  officeNumber,
         staffName: staffName,
         title: title,
-        course: {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
+        "course": {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
     ,
         courseName: "",
         coursseCode: "",
-        officeNumber: 0,
         nQFlevel: ""
     };
 
@@ -117,7 +116,7 @@ function getLecturerByStaffNumber(http:Client lecturerClient) returns error? {
     io:println("Response: ", response);
 }
 
-//function updateLecturer(http:Client lecturerClient) returns error? {
+function updateLecturer(http:Client lecturerClient) returns error? {
     string staffNumber2 = check io:readln("Enter staff number: ");
     int|error staffNumber = int:fromString(staffNumber2);
     string officeNumber1 = check io:readln("Enter office number: ");
@@ -130,20 +129,16 @@ function getLecturerByStaffNumber(http:Client lecturerClient) returns error? {
 
     Lecturer lecturer = {
         staffNumber: check staffNumber,
-        officeN: check officeNumber,
+        "officeNumber": check officeNumber,
         staffName: staffName,
         title: title,
-        course: {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
-    ,
-        courseName: "",
-        coursseCode: "",
-        officeNumber: 0,
-        nQFlevel: ""
-    };
+        "course": {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
+    
+    ,courseName: "", coursseCode: "", nQFlevel: ""};
 
     http:Response|http:Error response = lecturerClient->put("/lecturers/updateLecturer", lecturer);
     io:println("Response: ", response);
-//}
+}
 
 function deleteLecturer(http:Client lecturerClient) returns error? {
     string staffNumber = check io:readln("Enter staff number: ");
