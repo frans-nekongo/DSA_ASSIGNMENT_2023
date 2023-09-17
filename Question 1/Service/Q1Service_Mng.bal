@@ -28,7 +28,8 @@ type course record {|
 
 table<Lecturer> key(staffNumber) lecturerTable = table [
     {officeNumber: 211, staffNumber: 22101, staffName: "John", title: "Lecturer", courseName: "DTA", coursseCode: "DSA611", nQFlevel: "7"},
-    {officeNumber: 211, staffNumber: 22102, staffName: "Ruusa", title: "Lecturer", courseName: "DTA", coursseCode: "DSA611", nQFlevel: "7"}
+    {officeNumber: 211, staffNumber: 22102, staffName: "Ruusa", title: "Lecturer", courseName: "DTA", coursseCode: "DSA611", nQFlevel: "7"},
+    {officeNumber: 210, staffNumber: 22103, staffName: "Nashandi", title: "Lecturer", courseName: "DTA", coursseCode: "DSA611", nQFlevel: "7"}
     ];
 
 service /lecturers on new http:Listener(9090) {

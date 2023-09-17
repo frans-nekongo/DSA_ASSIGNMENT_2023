@@ -62,14 +62,14 @@ public function main() returns error? {
             }
 
             "6" => {
-                error? lecturersByCourseCode = getLecturersByCourseCode(lecturerClient);
+                error|http:Response lecturersByCourseCode = getLecturersByCourseCode(lecturerClient);
                 if lecturersByCourseCode is error {
                     io:println("cannot retrieve lecturer");
                 }
             }
 
             "7" => {
-                error? lecturersByOfficeNumber = getLecturersByOfficeNumber(lecturerClient);
+                error|http:Response lecturersByOfficeNumber = getLecturersByOfficeNumber(lecturerClient);
                 if lecturersByOfficeNumber is error {
 
                 }
@@ -176,17 +176,30 @@ function deleteLecturer(http:Client lecturerClient) returns error|http:Response 
     // TODO: Update the request as needed;
     http:Request request = new;
     http:Response response = check lecturerClient->delete(resourcePath, request);
+    io:println("succesfully deleted lecturer");
     return response;
+    
 }
 
-function getLecturersByCourseCode(http:Client lecturerClient) returns error? {
-    string courseCode = check io:readln("Enter course code: ");
-    http:Response|http:Error response = lecturerClient->get("/lecturers/getLecturersByCourseCode?courseCode=" + courseCode);
-    io:println("Response: ", response);
+function getLecturersByCourseCode(http:Client lecturerClient) returns error|http:Response {
+    
+    string courseCode = io:readln("Enter course code: ");
+
+    string resourcePath = string `/getLecturersByCourseCode`;
+        map<anydata> queryParam = {"courseCode": courseCode};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        http:Response response = check lecturerClient->get(resourcePath);
+        io:println(response.getJsonPayload());
+        return response;
 }
 
-function getLecturersByOfficeNumber(http:Client lecturerClient) returns error? {
-    string officeNumber = check io:readln("Enter office number: ");
-    http:Response|http:Error response = lecturerClient->get("/lecturers/getLecturersByOffice?officeNumber=" + officeNumber);
-    io:println("Response: ", response);
+function getLecturersByOfficeNumber(http:Client lecturerClient) returns error|http:Response {
+    string officeNumber = io:readln("Enter office number: ");
+
+     string resourcePath = string `/getLecturersByOffice`;
+        map<anydata> queryParam = {"officeNumber": officeNumber};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        http:Response response = check lecturerClient->get(resourcePath);
+        io:println(response.getJsonPayload());
+        return response;
 }
