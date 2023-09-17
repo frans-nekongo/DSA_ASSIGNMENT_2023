@@ -27,7 +27,8 @@ type course record {|
 |};
 
 table<Lecturer> key(staffNumber) lecturerTable = table [
-    {officeNumber: 0, staffNumber: 1, staffName: "John", title: "Lecturer", courseName: "Data Structures and algorithms", coursseCode: "DSA611", nQFlevel: "7"}
+    {officeNumber: 211, staffNumber: 22101, staffName: "John", title: "Lecturer", courseName: "DTA", coursseCode: "DSA611", nQFlevel: "7"},
+    {officeNumber: 211, staffNumber: 22102, staffName: "Ruusa", title: "Lecturer", courseName: "DTA", coursseCode: "DSA611", nQFlevel: "7"}
     ];
 
 service /lecturers on new http:Listener(9090) {

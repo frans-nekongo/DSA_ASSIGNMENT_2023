@@ -3,7 +3,7 @@ import ballerina/io;
 
 //http:Client lecturerClient = check new("http://localhost:9090");
 
-function displayMenuOptions(){
+function displayMenuOptions() {
     io:println("Please select an option:");
     io:println("1. Add lecturer");
     io:println("2. Get all lecturers");
@@ -15,6 +15,7 @@ function displayMenuOptions(){
     io:println("0. Exit");
 
 }
+
 public function main() returns error? {
     http:Client lecturerClient = check new ("http://localhost:9090/lecturers");
 
@@ -23,7 +24,7 @@ public function main() returns error? {
     while (true) {
         displayMenuOptions();
         string option = io:readln("Enter your option: ");
- 
+
         match option {
             "1" => {
                 error? lecturerResult = addLecturer(lecturerClient);
@@ -54,7 +55,7 @@ public function main() returns error? {
             }
 
             "5" => {
-                error? lecturer = deleteLecturer(lecturerClient);
+                error|http:Response lecturer = deleteLecturer(lecturerClient);
                 if lecturer is error {
                     io:println("unable to delete lecturer");
                 }
@@ -73,7 +74,7 @@ public function main() returns error? {
 
                 }
             }
-             "0" => {
+            "0" => {
                 // Exit the client
                 break;
             }
@@ -130,11 +131,11 @@ function getLecturerByStaffNumber(http:Client lecturerClient) returns error|http
     string staffNumber = io:readln("enter staff number: ");
 
     string resourcePath = string `/lecturersByStaffNumber`;
-        map<anydata> queryParam = {"staffNumber": staffNumber};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        http:Response response = check lecturerClient->get(resourcePath);
-        io:println(response.getJsonPayload());
-        return response;
+    map<anydata> queryParam = {"staffNumber": staffNumber};
+    resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+    http:Response response = check lecturerClient->get(resourcePath);
+    io:println(response.getJsonPayload());
+    return response;
 }
 
 function updateLecturer(http:Client lecturerClient) returns error? {
@@ -165,10 +166,17 @@ function updateLecturer(http:Client lecturerClient) returns error? {
     io:println("Response: ", response);
 }
 
-function deleteLecturer(http:Client lecturerClient) returns error? {
-    string staffNumber = check io:readln("Enter staff number: ");
-    http:Response|http:Error response = lecturerClient->delete("/lecturers/deleteLecturer?staffNumber=" + staffNumber);
-    io:println("Response: ", response);
+function deleteLecturer(http:Client lecturerClient) returns error|http:Response {
+    
+    string staffNumber = io:readln("enter staff number: ");
+
+    string resourcePath = string `/deleteLecturer`;
+    map<anydata> queryParam = {"staffNumber": staffNumber};
+    resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+    // TODO: Update the request as needed;
+    http:Request request = new;
+    http:Response response = check lecturerClient->delete(resourcePath, request);
+    return response;
 }
 
 function getLecturersByCourseCode(http:Client lecturerClient) returns error? {
