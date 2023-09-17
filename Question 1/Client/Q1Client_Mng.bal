@@ -16,7 +16,7 @@ public function main() returns error {
 
     match option {
         "1" => {addLecturer();}
-        "2" => {getAllLectures();}
+        "2" => {error? allLectures = getAllLectures();}
         "3" => {getLecturerByStaffNumber();}
         "4" => {updateLecture();}
         "5" => {deleteLecture();}
@@ -52,10 +52,10 @@ function fromString(string s) returns int|error{}
     io:println("Response: ", response);
 //}
 
-//function getAllLecturers() returns error? {
+function getAllLectures() returns error? {
     var response = lecturerClient->get("/lecturers/allLectures");
     io:println("Response: ", response);
-//}
+}
 
 //function getLecturerByStaffNumber() returns error? {
     string staffNumber = check io:readln("Enter staff number: ");
@@ -93,6 +93,7 @@ function fromString(string s) returns int|error{}
     string courseCode = check io:readln("Enter course code: ");
     var response = lecturerClient->get("/lecturers/getLecturersByCourseCode?courseCode=" + courseCode);
 //    io:println("Response: ", response);
+
 //function getLecturersByOfficeNumber() returns error? {
     string officeNumber = check io:readln("Enter office number: ");
     var response = lecturerClient->get("/lecturers/getLecturersByOffice?officeNumber=" + officeNumber);
