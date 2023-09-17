@@ -8,6 +8,7 @@ public function main() returns error? {
 
     string option = "";
 
+    // I added a while loop so that the client doesn't close immediately after every command
     while option !== "8" {
         io:println("");
         io:println("Welcome to the API client!");
