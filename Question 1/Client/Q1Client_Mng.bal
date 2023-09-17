@@ -102,7 +102,7 @@ function addLecturer(http:Client lecturerClient) returns error? {
     // Construct the lecturer record
     Lecturer lecturer = {
         staffNumber: check staffNumber,
-        officeNumber: check officeNumber,
+        "officeN": {officeNumber:check officeNumber},
         staffName: staffName,
         title: title,
         "course": {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
@@ -110,7 +110,7 @@ function addLecturer(http:Client lecturerClient) returns error? {
         courseName: "",
         coursseCode: "",
         nQFlevel: ""
-    };
+    ,officeNumber: 0};
 
     // Send the request to add the lecturer
     http:Response|http:Error response = lecturerClient->post("/lecturers/addLecturer", lecturer);
@@ -151,7 +151,7 @@ function updateLecturer(http:Client lecturerClient) returns error? {
 
     Lecturer lecturer = {
         staffNumber: check staffNumber,
-        "officeNumber": check officeNumber,
+        "officeN": {officeNumber:check officeNumber},
         staffName: staffName,
         title: title,
         "course": {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
@@ -160,7 +160,7 @@ function updateLecturer(http:Client lecturerClient) returns error? {
         courseName: "",
         coursseCode: "",
         nQFlevel: ""
-    };
+    ,officeNumber: 0};
 
     http:Response|http:Error response = lecturerClient->put("/lecturers/updateLecturer", lecturer);
     io:println("Response: ", response);
