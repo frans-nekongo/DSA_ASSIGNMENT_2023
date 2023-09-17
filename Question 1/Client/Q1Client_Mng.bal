@@ -7,7 +7,7 @@ function displayMenuOptions(){
     io:println("Please select an option:");
     io:println("1. Add lecturer");
     io:println("2. Get all lecturers");
-    io:println("3. Get lecturer by ID");
+    io:println("3. Get lecturer by staffNumber");
     io:println("4. Update lecturer");
     io:println("5. Delete lecturer");
     io:println("6. Get lecturers by course code");
@@ -40,7 +40,7 @@ public function main() returns error? {
             }
 
             "3" => {
-                error? lecturerByStaffNumber = getLecturerByStaffNumber(lecturerClient);
+                error|http:Response lecturerByStaffNumber = getLecturerByStaffNumber(lecturerClient);
                 if lecturerByStaffNumber is error {
                     io:println("cannot retrieve lecturer");
                 }
@@ -125,10 +125,16 @@ function getAllLectures(http:Client lecturerClient) returns http:Response|error 
     return response;
 }
 
-function getLecturerByStaffNumber(http:Client lecturerClient) returns error? {
-    string staffNumber = check io:readln("Enter staff number: ");
-    http:Response|http:Error response = lecturerClient->get("/lecturers/lecturersByStaffNumber?staffNumber=" + staffNumber);
-    io:println("Response: ", response);
+function getLecturerByStaffNumber(http:Client lecturerClient) returns error|http:Response {
+
+    string staffNumber = io:readln("enter staff number: ");
+
+    string resourcePath = string `/lecturersByStaffNumber`;
+        map<anydata> queryParam = {"staffNumber": staffNumber};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        http:Response response = check lecturerClient->get(resourcePath);
+        io:println(response.getJsonPayload());
+        return response;
 }
 
 function updateLecturer(http:Client lecturerClient) returns error? {
