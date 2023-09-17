@@ -18,26 +18,30 @@ function displayMenuOptions(){
 public function main() returns error? {
     http:Client lecturerClient = check new ("http://localhost:9090/lecturers");
 
-    io:println("Welcome to the managing staff client!");
+    io:println("Welcome to the API client!");
+    io:println("Please select an option:");
+    io:println("1. Add user");
+    io:println("2. Get all users");
+    io:println("3. Get user by ID");
+    io:println("4. Update user");
+    io:println("5. Delete user");
 
-    while (true) {
-        displayMenuOptions();
-        string option = io:readln("Enter your option: ");
- 
-        match option {
-            "1" => {
-                error? lecturerResult = addLecturer(lecturerClient);
-                if lecturerResult is error {
-                    io:println("Error adding lecturer");
-                }
-            }
+    string option = io:readln("Enter your option: ");
 
-            "2" => {
-                http:Response|error allLectures = getAllLectures(lecturerClient);
-                if allLectures is error {
-                    io:println("cannot retrieve lecturers");
-                }
+    match option {
+        "1" => {
+            error? lecturerResult = addLecturer(lecturerClient);
+            if lecturerResult is error {
+                io:println("Error adding lecturer");
             }
+        }
+
+        "2" => {
+            http:Response|error allLectures = getAllLectures(lecturerClient);
+            if allLectures is error {
+                io:println("cannot retrieve lecturers");
+            }
+        }
 
             "3" => {
                 error? lecturerByStaffNumber = getLecturerByStaffNumber(lecturerClient);
@@ -67,19 +71,14 @@ public function main() returns error? {
                 }
             }
 
-            "7" => {
-                error? lecturersByOfficeNumber = getLecturersByOfficeNumber(lecturerClient);
-                if lecturersByOfficeNumber is error {
+        "7" => {
+            error? lecturersByOfficeNumber = getLecturersByOfficeNumber(lecturerClient);
+            if lecturersByOfficeNumber is error {
 
-                }
             }
-             "0" => {
-                // Exit the client
-                break;
-            }
-            _ => {
-                io:println("Invalid option");
-            }
+        }
+        _ => {
+            io:println("Invalid option");
         }
     }
 }
