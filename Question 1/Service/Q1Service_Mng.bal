@@ -114,6 +114,7 @@ service /lecturers on new http:Listener(9090) {
     }
 }
 
+
     resource function delete deleteLecturer(http:Caller caller, http:Request req, int staffNumber) returns error? {
         // Check if the lecturer exists in the table
         if (lecturerTable.hasKey(staffNumber)) {
