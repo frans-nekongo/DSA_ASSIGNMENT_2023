@@ -27,7 +27,7 @@ public function main() returns error? {
 
         match option {
             "1" => {
-                error? lecturerResult = addLecturer(lecturerClient);
+                error|http:Response lecturerResult = addLecturer(lecturerClient);
                 if lecturerResult is error {
                     io:println("Error adding lecturer");
                 }
@@ -48,7 +48,7 @@ public function main() returns error? {
             }
 
             "4" => {
-                error? lecturer = updateLecturer(lecturerClient);
+                error|http:Response lecturer = updateLecturer(lecturerClient);
                 if lecturer is error {
                     io:println("cannot update lecturer");
                 }
@@ -85,13 +85,13 @@ public function main() returns error? {
     }
 }
 
-function addLecturer(http:Client lecturerClient) returns error? {
+function addLecturer(http:Client lecturerClient) returns error|http:Response {
 
     // Prompt the user for the necessary information
     string staffNumber1 = check io:readln("Enter staff number: ");
-    int|error staffNumber = int:fromString(staffNumber1);
+    int staffNumber = check int:fromString(staffNumber1);
     string officeNumber1 = check io:readln("Enter office number: ");
-    int|error officeNumber = int:fromString(officeNumber1);
+    int officeNumber = check int:fromString(officeNumber1);
 
     string staffName = check io:readln("Enter staff name: ");
     string title = check io:readln("Enter title: ");
@@ -101,22 +101,24 @@ function addLecturer(http:Client lecturerClient) returns error? {
 
     // Construct the lecturer record
     Lecturer lecturer = {
-        staffNumber: check staffNumber,
-        "officeN": {officeNumber:check officeNumber},
+        officeNumber: officeNumber,
+        courseName: courseName,
+        coursseCode: courseCode,
+        nQFlevel: nQFlevel,
         staffName: staffName,
-        title: title,
-        "course": {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
-    ,
-        courseName: "",
-        coursseCode: "",
-        nQFlevel: ""
-    ,officeNumber: 0};
+        staffNumber: staffNumber,
+        title: title
+    };
 
     // Send the request to add the lecturer
-    http:Response|http:Error response = lecturerClient->post("/lecturers/addLecturer", lecturer);
-
-    io:println("Response: ", response);
-    return ();
+    string resourcePath = string `/addLecturer`;
+    http:Request request = new;
+    json jsonBody = lecturer.toJson();
+    request.setPayload(jsonBody, "application/json");
+    http:Response response = check lecturerClient->post(resourcePath, request);
+    //io:println(jsonBody);
+    io:println("succesfully added lecturer");
+    return response;
 }
 
 function getAllLectures(http:Client lecturerClient) returns http:Response|error {
@@ -138,36 +140,44 @@ function getLecturerByStaffNumber(http:Client lecturerClient) returns error|http
     return response;
 }
 
-function updateLecturer(http:Client lecturerClient) returns error? {
+function updateLecturer(http:Client lecturerClient) returns error|http:Response {
+
+    // Prompt the user for the necessary information
     string staffNumber2 = check io:readln("Enter staff number: ");
-    int|error staffNumber = int:fromString(staffNumber2);
+    int staffNumber = check int:fromString(staffNumber2);
     string officeNumber1 = check io:readln("Enter office number: ");
-    int|error officeNumber = int:fromString(officeNumber1);
-    string staffName = check io:readln("Enter staff name: ");
+    int officeNumber = check int:fromString(officeNumber1);
+
+    string staffName = io:readln("Enter staff name: ");
     string title = check io:readln("Enter title: ");
     string courseName = check io:readln("Enter course name: ");
     string courseCode = check io:readln("Enter course code: ");
     string nQFlevel = check io:readln("Enter NQF level: ");
 
+    // Construct the lecturer record
     Lecturer lecturer = {
-        staffNumber: check staffNumber,
-        "officeN": {officeNumber:check officeNumber},
+        officeNumber: officeNumber,
+        courseName: courseName,
+        coursseCode: courseCode,
+        nQFlevel: nQFlevel,
         staffName: staffName,
-        title: title,
-        "course": {courseName: courseName, coursseCode: courseCode, nQFlevel: nQFlevel}
-    
-    ,
-        courseName: "",
-        coursseCode: "",
-        nQFlevel: ""
-    ,officeNumber: 0};
+        staffNumber: staffNumber,
+        title: title
+    };
 
-    http:Response|http:Error response = lecturerClient->put("/lecturers/updateLecturer", lecturer);
-    io:println("Response: ", response);
+    // Send the request to add the lecturer
+    string resourcePath = string `/updateLecturer`;
+    http:Request request = new;
+    json jsonBody = lecturer.toJson();
+    request.setPayload(jsonBody, "application/json");
+    http:Response response = check lecturerClient->put(resourcePath, request);
+    //io:println(jsonBody);
+    io:println("succesfully updated lecturer");
+    return response;
 }
 
 function deleteLecturer(http:Client lecturerClient) returns error|http:Response {
-    
+
     string staffNumber = io:readln("enter staff number: ");
 
     string resourcePath = string `/deleteLecturer`;
@@ -178,28 +188,28 @@ function deleteLecturer(http:Client lecturerClient) returns error|http:Response 
     http:Response response = check lecturerClient->delete(resourcePath, request);
     io:println("succesfully deleted lecturer");
     return response;
-    
+
 }
 
 function getLecturersByCourseCode(http:Client lecturerClient) returns error|http:Response {
-    
+
     string courseCode = io:readln("Enter course code: ");
 
     string resourcePath = string `/getLecturersByCourseCode`;
-        map<anydata> queryParam = {"courseCode": courseCode};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        http:Response response = check lecturerClient->get(resourcePath);
-        io:println(response.getJsonPayload());
-        return response;
+    map<anydata> queryParam = {"courseCode": courseCode};
+    resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+    http:Response response = check lecturerClient->get(resourcePath);
+    io:println(response.getJsonPayload());
+    return response;
 }
 
 function getLecturersByOfficeNumber(http:Client lecturerClient) returns error|http:Response {
     string officeNumber = io:readln("Enter office number: ");
 
-     string resourcePath = string `/getLecturersByOffice`;
-        map<anydata> queryParam = {"officeNumber": officeNumber};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        http:Response response = check lecturerClient->get(resourcePath);
-        io:println(response.getJsonPayload());
-        return response;
+    string resourcePath = string `/getLecturersByOffice`;
+    map<anydata> queryParam = {"officeNumber": officeNumber};
+    resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+    http:Response response = check lecturerClient->get(resourcePath);
+    io:println(response.getJsonPayload());
+    return response;
 }
