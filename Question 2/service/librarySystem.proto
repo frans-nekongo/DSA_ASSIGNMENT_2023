@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+service libraryServer {
+
+    rpc Add_book (Book) returns (google.protobuf.BoolValue);
+    rpc getbookInfo (google.protobuf.StringValue) returns (Book);
+
+    rpc createStudent(Student) returns (google.protobuf.BoolValue);
+    rpc getStudentInfo(google.protobuf.StringValue) returns (Student);
+
+    rpc createLibrarian(Librarian) returns (google.protobuf.BoolValue);
+    rpc getLibrarianInfo(google.protobuf.StringValue) returns (Librarian);
+
+    rpc Borrow_Book(borrowBook) returns (Book) {}
+    rpc Update_book(updatebook) returns (Book) {}
+    rpc Available_books(list_avaiblable_books) returns (Book) {}
+    rpc Remove_book(remove_book) returns (Book) {}
+
+}
+
+//protobuf description for creation of book
+message Book {
+    string Title = 1;
+    string Author = 2;
+    string Location = 3;
+    string ISBN = 4;
+    bool available_status = 5;
+}
+//protobuf description for creating student user
+message Student {
+    string student_id = 1;
+    string first_name = 2;
+    string last_name= 3;
+    string role = 4;
+}
+//protobuf description for creating librarian user
+message Librarian {
+    string librerian_id = 1;
+    string first_name = 2;
+    string last_name= 3;
+    string role = 4; 
+}
+//message descprition for user borrowing book
+message UserBookPair {
+    string user_id = 1;
+    string book_ISBN = 2;
+    Student Student = 3;
+}
+message borrowBook{
+    string ISBN = 1;
+}
+
+message locatebook {
+    string place = 1;
+}
+
+message updatebook {
+    string ISBN = 1;
+}
+message list_avaiblable_books {
+    string ISBN = 1;
+}
+message remove_book{
+    string ISBN = 1;
+}
