@@ -1,4 +1,5 @@
 import ballerina/grpc;
+//import ballerina/io;
 
 type BookRecord record {|
     string title;
@@ -123,21 +124,50 @@ service "LibraryService" on ep {
     remote function BorrowBook(BorrowBookRequest value) returns BorrowBookResponse|error {
      // Retrieve the book details from the request
       string isbn = value.isbn;
+      string userid = value.user_id;
+
+
+
+      BookRecord book;
        // Check if the book exists in the books table
-        if (books.hasKey(isbn)) { 
+        if (users.hasKey(userid)) {
+            if (books.hasKey(isbn)) { 
+            //check if user exists
             // Check if the book is available
              if (books[isbn]?.available==true) {
 
                 // Update the availability status of the book 
-                books[isbn].available = false; 
-                 // Prepare the response 
-                 BorrowBookResponse response = { status: true }; 
-                 // Return the response 
-                 return response; } else { 
+               // books.filter(book => book.isbn == isbn).available = false;
+
+               string title= books[isbn]?.title.toString();
+               string author_1= books[isbn]?.author_1.toString();
+               string author_2= books[isbn]?.author_2.toString();
+               string location= books[isbn]?.location.toString();
+               boolean available= false;
+
+                book = { title: title,
+                         author_1: author_1,
+                          author_2: author_2, 
+                          location: location, 
+                          isbn: isbn,
+                           available: available }; 
+                           // Update the book in the books table 
+                           books.put(book); 
+                 
+                 } else { 
                     // Book is not available
                      return error("Book is not available"); } }
                       else { // Book not found 
-                      return error("Book not found"); }
+                      return error("Book not found"); } 
+     }
+      // Prepare the response 
+                 BorrowBookResponse response = println("Book is successfully borrowed"); 
+                 // Return the response 
+                 return response;
     }
+}
+
+function println(string s) returns BorrowBookResponse {
+    return {};
 }
 

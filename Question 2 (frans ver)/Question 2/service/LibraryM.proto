@@ -62,7 +62,6 @@ message BorrowBookRequest {
 }
 
 message BorrowBookResponse {
-  string status = 1;
 }
 
 service LibraryService {
