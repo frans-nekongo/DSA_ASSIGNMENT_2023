@@ -29,15 +29,18 @@ public function main() returns error? {
 
         match userType {
             "student" => {
-
+                displayStudentMenuOptions();
+                //add the reqs and all
 
             }
             "librarian" => {
+                displayLibrarianMenuOptions();
 
             }
 
-    }}
+    }
     
+    //add this to appropriate fields 
     AddBookRequest addBookRequest = {book: {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", isbn: "ballerina", available: true}};
     AddBookResponse addBookResponse = check ep->AddBook(addBookRequest);
     io:println(addBookResponse);
@@ -64,4 +67,4 @@ public function main() returns error? {
     BorrowBookResponse borrowBookResponse = check ep->BorrowBook(borrowBookRequest);
     io:println(borrowBookResponse);
 }
-
+}
