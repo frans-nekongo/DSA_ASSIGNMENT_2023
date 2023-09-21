@@ -1,11 +1,42 @@
 import ballerina/io;
 
+
+function displayStudentMenuOptions() {
+    io:println("Please select an option:");
+    io:println("1. get list of books");
+    io:println("2. borrow book");
+    io:println("3. search for a book");
+    io:println("4. return a book");
+
+}
+function displayLibrarianMenuOptions() {
+    io:println("Please select an option:");
+    io:println("1. add book");
+    io:println("2. update book");
+    io:println("3. remove a book");
+    io:println("4. list borrowed books");
+}
 LibraryServiceClient ep = check new ("http://localhost:9090");
 
 public function main() returns error? {
 
+    io:println("Welcome to the Library Service");
+    
+
+    while (true) {
+        io:println("Are you a student or a librarian?");
+        string userType = io:readln();
+
+        match userType {
+            "student" => {
 
 
+            }
+            "librarian" => {
+
+            }
+
+    }}
     
     AddBookRequest addBookRequest = {book: {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", isbn: "ballerina", available: true}};
     AddBookResponse addBookResponse = check ep->AddBook(addBookRequest);
