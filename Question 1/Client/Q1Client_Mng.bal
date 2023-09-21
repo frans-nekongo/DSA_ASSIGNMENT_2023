@@ -213,4 +213,3 @@ function getLecturersByOfficeNumber(http:Client lecturerClient) returns error|ht
     io:println(response.getJsonPayload());
     return response;
 }
-y
