@@ -54,7 +54,9 @@ public function main() returns error? {
                          io:println(borrowBookResponse);
                     }
                     "3"=>{
-                          LocateBookRequest locateBookRequest = {isbn: "ballerina"};
+                        //add inputs  
+                        string bISBN =io:readln("Enter Book isbn");
+                          LocateBookRequest locateBookRequest = {isbn: bISBN};
                           LocateBookResponse locateBookResponse = check ep->LocateBook(locateBookRequest);
                           io:println(locateBookResponse);
 
@@ -85,7 +87,9 @@ public function main() returns error? {
 
                     }
                     "3"=>{
-                         RemoveBookRequest removeBookRequest = {isbn: "ballerina"};
+                        string bISBN =io:readln("Enter Book isbn");
+
+                         RemoveBookRequest removeBookRequest = {isbn: bISBN};
                          RemoveBookResponse removeBookResponse = check ep->RemoveBook(removeBookRequest);
                          io:println(removeBookResponse);
 
