@@ -21,6 +21,10 @@ message AddBookResponse {
 message CreateUserRequest {
   repeated User users = 1;
 }
+message CreateUserResponse {
+  string user_id = 1;
+}
+
 
 message User {
   string user_id = 1;
@@ -31,6 +35,9 @@ message User {
 message UpdateBookRequest {
   string isbn = 1;
   Book book = 2;
+}
+message UpdateBookResponse {
+  string isbn = 1;
 }
 
 message RemoveBookRequest {
@@ -89,8 +96,8 @@ message ListAllBorrowedBooksResponse {
 
 service LibraryService {
   rpc AddBook(AddBookRequest) returns (AddBookResponse);
-  rpc CreateUsers(CreateUserRequest) returns (google.protobuf.Empty);
-  rpc UpdateBook(UpdateBookRequest) returns (google.protobuf.Empty);
+  rpc CreateUsers(CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse);
   rpc RemoveBook(RemoveBookRequest) returns (RemoveBookResponse);
   rpc ListAvailableBooks(ListAvailableBooksRequest) returns (ListAvailableBooksResponse);
   rpc LocateBook(LocateBookRequest) returns (LocateBookResponse);

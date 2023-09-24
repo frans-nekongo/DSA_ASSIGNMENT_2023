@@ -109,19 +109,7 @@ public function main() returns error? {
                 }
             }
 
-    }
-    
-    //add this to appropriate fields 
-   
-///this for making a user 
-    CreateUserRequest createUsersRequest = {users: [{user_id: "ballerina", profile: "ballerina", 'type: "ballerina"}]};
-    check ep->CreateUsers(createUsersRequest);
-
-    
-   
-   
-    
-    
+    }   
 }
 }
 }

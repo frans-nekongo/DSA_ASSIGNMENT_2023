@@ -1,5 +1,4 @@
 import ballerina/grpc;
-//import ballerina/io;
 
 type BookRecord record {|
     string title;
@@ -27,7 +26,6 @@ table<UserRecord> key(userid) users=table[
     {userid:"2",profile:"Ruusa",typeUser:"student"},
     {userid:"3",profile:"Nashandi",typeUser:"Librarian"}
 ];
-
 
 listener grpc:Listener ep = new (9090);
 
@@ -98,14 +96,127 @@ service "LibraryService" on ep {
     return response;
     }
     remote function LocateBook(LocateBookRequest value) returns LocateBookResponse|error {
+    // Retrieve the book details from the request 
+    string isbn = value.isbn; 
+    // Check if the book exists in the books table 
+    if (books.hasKey(isbn)) { 
+        // Retrieve the book location 
+        string? location = books[isbn]?.location; 
+
+        //for status available
+        boolean val;
+        string valble= books[isbn]?.available.toString();
+        if valble == "true" {
+            val = true;
+        } else {
+            val = false;
+        }
+        // Prepare the response 
+        LocateBookResponse response = { location: location.toString(),available: val }; 
+        // Return the response 
+        return response; } else { 
+            // Book not found 
+            return error("Book not found"); }
     }
     remote function BorrowBook(BorrowBookRequest value) returns BorrowBookResponse|error {
+     // Retrieve the book details from the request
+      string isbn = value.isbn;
+      string userid = value.user_id;
+
+
+
+      BookRecord book;
+       // Check if the book exists in the books table
+        if (users.hasKey(userid)) {
+            if (books.hasKey(isbn)) { 
+            //check if user exists
+            // Check if the book is available
+             if (books[isbn]?.available==true) {
+
+                // Update the availability status of the book 
+               // books.filter(book => book.isbn == isbn).available = false;
+
+               string title= books[isbn]?.title.toString();
+               string author_1= books[isbn]?.author_1.toString();
+               string author_2= books[isbn]?.author_2.toString();
+               string location= books[isbn]?.location.toString();
+               boolean available= false;
+
+                book = { title: title,
+                         author_1: author_1,
+                          author_2: author_2, 
+                          location: location, 
+                          isbn: isbn,
+                           available: available }; 
+                           // Update the book in the books table 
+                           books.put(book); 
+                 
+                 } else { 
+                    // Book is not available
+                     return error("Book is not available"); } }
+                      else { // Book not found 
+                      return error("Book not found"); } 
+     }
+      // Prepare the response 
+                 BorrowBookResponse response = println("Book is successfully borrowed"); 
+                 // Return the response 
+                 return response;
     }
     remote function ReturnBook(ReturnBookRequest value) returns ReturnBookResponse|error {
+    // Retrieve the book details from the request
+    string isbn = value.isbn;
+    string userid = value.user_id;
+
+    // Check if the book exists in the books table
+    if (books.hasKey(isbn)) {
+        // Update the availability status of the book
+        string title= books[isbn]?.title.toString();
+        string author_1= books[isbn]?.author_1.toString();
+        string author_2= books[isbn]?.author_2.toString();
+        string location= books[isbn]?.location.toString();
+        boolean available= true;
+
+        BookRecord book = { title: title,
+                            author_1: author_1,
+                            author_2: author_2, 
+                            location: location, 
+                            isbn: isbn,
+                            available: available }; 
+        // Update the book in the books table 
+        books.put(book); 
+
+        // Prepare the response 
+        ReturnBookResponse response = { isbn: isbn }; 
+        // Return the response 
+        return response;
+    } else {
+        // Book not found 
+        return error("Book not found");
+    }
     }
     remote function ListBorrowedBooksByUser(ListBorrowedBooksByUserRequest value) returns ListBorrowedBooksByUserResponse|error {
+    // Retrieve the user id from the request
+    string userid = value.user_id;
+
+    // Filter the books that are not available
+    var borrowedBooks = books.filter(book => book.available==false);
+
+    // Prepare the response 
+    ListBorrowedBooksByUserResponse response = { books: borrowedBooks.toArray() }; 
+    // Return the response 
+    return response;
     }
     remote function ListAllBorrowedBooks(ListAllBorrowedBooksRequest value) returns ListAllBorrowedBooksResponse|error {
+    // Filter the books that are not available
+    var borrowedBooks = books.filter(book => book.available==false);
+
+    // Prepare the response 
+    ListAllBorrowedBooksResponse response = { books: borrowedBooks.toArray() }; 
+    // Return the response 
+    return response;
     }
 }
 
+function println(string s) returns BorrowBookResponse {
+    return {};
+}
