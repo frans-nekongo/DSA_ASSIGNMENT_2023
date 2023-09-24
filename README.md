@@ -1,9 +1,9 @@
-#        DSA_ASSIGNMENT_2023
+# DSA_ASSIGNMENT_2023
+
 ## Group Assignment for partime distributed systems
 
 - Question 1: Restful API
 - Question 2: Grpc
-
 
 ### Group Members
 
