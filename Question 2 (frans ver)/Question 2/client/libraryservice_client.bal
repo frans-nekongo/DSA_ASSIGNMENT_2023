@@ -39,12 +39,14 @@ public function main() returns error? {
 
                 match stdntA {
                     "1"=>{
+                        //"1. get list of books"
                          ListAvailableBooksRequest listAvailableBooksRequest = {};
                          ListAvailableBooksResponse listAvailableBooksResponse = check ep->ListAvailableBooks(listAvailableBooksRequest);
                          io:println(listAvailableBooksResponse);
 
                     }
                     "2"=>{
+                        //"2. borrow book"
 
                         string uSRID =io:readln("Enter user id");
                         string bISBN =io:readln("Enter Book isbn");
@@ -54,6 +56,7 @@ public function main() returns error? {
                          io:println(borrowBookResponse);
                     }
                     "3"=>{
+                        //"3. search for a book"
                         //add inputs  
                         string bISBN =io:readln("Enter Book isbn");
                           LocateBookRequest locateBookRequest = {isbn: bISBN};
@@ -62,6 +65,7 @@ public function main() returns error? {
 
                     }
                     "4"=>{
+                        //"4. return a book"
 
                         //dont forget to change this code to return book and not update
                           UpdateBookRequest updateBookRequest = {isbn: "ballerina", book: {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", isbn: "ballerina", available: true}};
@@ -77,16 +81,19 @@ public function main() returns error? {
 
                 match libA {
                     "1"=>{
+                        //"1. add book"
                          AddBookRequest addBookRequest = {book: {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", isbn: "ballerina", available: true}};
                          AddBookResponse addBookResponse = check ep->AddBook(addBookRequest);
                          io:println(addBookResponse);
                     }
                     "2"=>{
+                        //"2. update book"
                         UpdateBookRequest updateBookRequest = {isbn: "ballerina", book: {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", isbn: "ballerina", available: true}};
                          check ep->UpdateBook(updateBookRequest);
 
                     }
                     "3"=>{
+                        //"3. remove a book"
                         string bISBN =io:readln("Enter Book isbn");
 
                          RemoveBookRequest removeBookRequest = {isbn: bISBN};
@@ -95,6 +102,7 @@ public function main() returns error? {
 
                     }
                     "4"=>{
+                        //"4. list borrowed books"
 
                         //make for listing borrowed books function
                     }
