@@ -25,7 +25,7 @@ public function main() returns error? {
     
 
    while (true) {
-    //crate login or create new uaser function here remeber
+    //create login or create new user function here remember
     string lType =io:readln("1. to login , 2. to create new user");
 
 
@@ -42,7 +42,7 @@ while (true){
 
                 match stdntA {
                     "1"=>{
-                        //"1. get list of books"
+                        //"1. get list of the books"
                          ListAvailableBooksRequest listAvailableBooksRequest = {};
                          ListAvailableBooksResponse listAvailableBooksResponse = check ep->ListAvailableBooks(listAvailableBooksRequest);
                          io:println(listAvailableBooksResponse);
@@ -87,7 +87,7 @@ while (true){
 
                 match libA {
                     "1"=>{
-                        //"1. add book"
+                        //"1. add a book"
                         string bTitle =io:readln("Enter Book title");
                         string bAuthor1 =io:readln("Enter Book author_1");
                         string bAuthor2 =io:readln("Enter Book author_2");
@@ -104,7 +104,7 @@ while (true){
                          io:println(listAvailableBooksResponse);
                     }
                     "2"=>{
-                        //"2. update book"
+                        //"2. update a book"
                         
                         string bISBN =io:readln("Enter Book isbn of book to be updated");
 
