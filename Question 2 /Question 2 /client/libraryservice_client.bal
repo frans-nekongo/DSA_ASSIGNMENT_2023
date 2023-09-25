@@ -97,6 +97,11 @@ while (true){
                         AddBookRequest addBookRequest = {book: {title: bTitle, author_1: bAuthor1, author_2: bAuthor2, location: bLocation, isbn: bISBN, available: true}};
                         AddBookResponse addBookResponse = check ep->AddBook(addBookRequest);
                         io:println(addBookResponse);
+
+                        //"get list of books"
+                         ListAvailableBooksRequest listAvailableBooksRequest = {};
+                         ListAvailableBooksResponse listAvailableBooksResponse = check ep->ListAvailableBooks(listAvailableBooksRequest);
+                         io:println(listAvailableBooksResponse);
                     }
                     "2"=>{
                         //"2. update book"
@@ -126,6 +131,7 @@ while (true){
                         RemoveBookRequest removeBookRequest = {isbn: bISBN};
                         RemoveBookResponse removeBookResponse = check ep->RemoveBook(removeBookRequest);
                         io:println(removeBookResponse);
+                        
 
                     }
                     "4"=>{
