@@ -95,7 +95,7 @@ message ListAllBorrowedBooksResponse {
 }
 
 service LibraryService {
-  rpc AddBook(AddBookRequest) returns (AddBookResponse);
+  rpc AddBook(AddBookRequest) returns (AddBookResponse); // RPC method for adding books
   rpc CreateUsers(CreateUserRequest) returns (CreateUserResponse);
   rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse);
   rpc RemoveBook(RemoveBookRequest) returns (RemoveBookResponse);
