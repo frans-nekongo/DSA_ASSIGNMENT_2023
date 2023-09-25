@@ -1,5 +1,6 @@
 import ballerina/io;
 
+
 function displayStudentMenuOptions() {
     io:println("Please select an option:");
     io:println("1. get list of books");
@@ -16,6 +17,7 @@ function displayLibrarianMenuOptions() {
     io:println("4. list All borrowed books");
     io:println("5. list borrowed books by user");
 }
+
 
 LibraryServiceClient ep = check new ("http://localhost:9090");
 
@@ -154,14 +156,31 @@ while (true){
 
     }   
 }else if (lType =="2") {
-    string uSRID =io:readln("Enter user id");
-    string uPrfl =io:readln("Enter user profile");
-    string uType =io:readln("Enter user type");
-    
+string numUsersStr = io:readln("Enter the number of users to create");
+int numUsers = check int:fromString(numUsersStr);
+
+CreateUsersStreamingClient createUsersStreamingClient = check ep->CreateUsers();
+
+int i = 0;
+while (i < numUsers) {
+    string uSRID = io:readln("Enter user id for user " + i.toString());
+    string uPrfl = io:readln("Enter user profile for user " + i.toString());
+    string uType = io:readln("Enter user type for user " + i.toString());
+
     CreateUserRequest createUsersRequest = {users: [{user_id: uSRID, profile: uPrfl, 'type: uType}]};
-    CreateUserResponse createUsersResponse = check ep->CreateUsers(createUsersRequest);
-    io:println(createUsersResponse);
-            }
+
+    check createUsersStreamingClient->sendCreateUserRequest(createUsersRequest);
+    i += 1;
+}
+
+check createUsersStreamingClient->complete();
+
+CreateUserResponse? createUsersResponse = check createUsersStreamingClient->receiveCreateUserResponse();
+io:println(createUsersResponse);
+
+
+
+                    }
         }
     }    
 }

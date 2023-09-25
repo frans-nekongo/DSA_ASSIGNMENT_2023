@@ -27,12 +27,13 @@ table<UserRecord> key(userid) users=table[
     {userid:"3",profile:"Nashandi",typeUser:"Librarian"}
 ];
 
+
 listener grpc:Listener ep = new (9090);
 
 @grpc:Descriptor {value: LIBRARYM_DESC}
 service "LibraryService" on ep {
 
-    remote function AddBook(AddBookRequest value) returns AddBookResponse|error {
+     remote function AddBook(AddBookRequest value) returns AddBookResponse|error {
         // Retrieve the book details from the request
         BookRecord book = {
             title: value.book.title,
@@ -53,16 +54,6 @@ service "LibraryService" on ep {
 
         // Return the response
         return response;
-    }
-    remote function CreateUsers(CreateUserRequest value) returns error? {
-    // Retrieve the user details from the request 
-    UserRecord user = { userid: value.users[0].user_id,
-                         profile: value.users[0].profile,
-                          typeUser: value.users[0].'type };
-     // Add the user to the users table 
-     users.add(user);
-      // Return success 
-      return ();
     }
     remote function UpdateBook(UpdateBookRequest value) returns error? {
     // Retrieve the book details from the request 
@@ -215,8 +206,12 @@ service "LibraryService" on ep {
     // Return the response 
     return response;
     }
+    remote function CreateUsers(stream<CreateUserRequest, grpc:Error?> clientStream) returns CreateUserResponse|error {
+    foreach UserRecord in users {
+        
+          }
+    }
 }
-
 function println(string s) returns BorrowBookResponse {
     return {};
 }

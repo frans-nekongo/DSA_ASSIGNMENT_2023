@@ -1,5 +1,4 @@
 import ballerina/grpc;
-//import ballerina/io;
 
 type BookRecord record {|
     string title;
@@ -31,9 +30,7 @@ table<UserRecord> key(userid) users=table[
 listener grpc:Listener ep = new (9090);
 
 @grpc:Descriptor {value: LIBRARYM_DESC}
-
 service "LibraryService" on ep {
-
 
     remote function AddBook(AddBookRequest value) returns AddBookResponse|error {
         // Retrieve the book details from the request
@@ -56,16 +53,6 @@ service "LibraryService" on ep {
 
         // Return the response
         return response;
-    }
-    remote function CreateUsers(CreateUserRequest value) returns error? {
-    // Retrieve the user details from the request 
-    UserRecord user = { userid: value.users[0].user_id,
-                         profile: value.users[0].profile,
-                          typeUser: value.users[0].'type };
-     // Add the user to the users table 
-     users.add(user);
-      // Return success 
-      return ();
     }
     remote function UpdateBook(UpdateBookRequest value) returns error? {
     // Retrieve the book details from the request 
@@ -165,9 +152,71 @@ service "LibraryService" on ep {
                  // Return the response 
                  return response;
     }
+    remote function ReturnBook(ReturnBookRequest value) returns ReturnBookResponse|error {
+    // Retrieve the book details from the request
+    string isbn = value.isbn;
+    string userid = value.user_id;
+
+    // Check if the book exists in the books table
+    if (books.hasKey(isbn)) {
+        // Update the availability status of the book
+        string title= books[isbn]?.title.toString();
+        string author_1= books[isbn]?.author_1.toString();
+        string author_2= books[isbn]?.author_2.toString();
+        string location= books[isbn]?.location.toString();
+        boolean available= true;
+
+        BookRecord book = { title: title,
+                            author_1: author_1,
+                            author_2: author_2, 
+                            location: location, 
+                            isbn: isbn,
+                            available: available }; 
+        // Update the book in the books table 
+        books.put(book); 
+
+        // Prepare the response 
+        ReturnBookResponse response = { isbn: isbn }; 
+        // Return the response 
+        return response;
+    } else {
+        // Book not found 
+        return error("Book not found");
+    }
+    }
+    remote function ListBorrowedBooksByUser(ListBorrowedBooksByUserRequest value) returns ListBorrowedBooksByUserResponse|error {
+    // Retrieve the user id from the request
+    string userid = value.user_id;
+
+    // Filter the books that are not available
+    var borrowedBooks = books.filter(book => book.available==false);
+
+    // Prepare the response 
+    ListBorrowedBooksByUserResponse response = { books: borrowedBooks.toArray() }; 
+    // Return the response 
+    return response;
+    }
+    remote function ListAllBorrowedBooks(ListAllBorrowedBooksRequest value) returns ListAllBorrowedBooksResponse|error {
+    // Filter the books that are not available
+    var borrowedBooks = books.filter(book => book.available==false);
+
+    // Prepare the response 
+    ListAllBorrowedBooksResponse response = { books: borrowedBooks.toArray() }; 
+    // Return the response 
+    return response;
+    }
+     remote function CreateUsers(CreateUserRequest value) returns error? {
+    // Retrieve the user details from the request 
+    UserRecord user = { userid: value.users[0].user_id,
+                         profile: value.users[0].profile,
+                          typeUser: value.users[0].'type };
+     // Add the user to the users table 
+     users.add(user);
+      // Return success 
+      return ();
+    }
 }
 
 function println(string s) returns BorrowBookResponse {
     return {};
 }
-
